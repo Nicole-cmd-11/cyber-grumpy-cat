@@ -9,6 +9,9 @@
 👉 **[点击这里，立刻让猫猫帮你翻译](https://www.coze.cn/s/T3whhNfzen8/)**
 *(无需注册，点开即玩，建议在手机端体验更佳)*
 
+## 🎬 视频展示 (Video Demo)
+👉 **[点击这里观看 1 分钟演示视频（飞书文档）](https://my.feishu.cn/wiki/VBKCwtDxpiNIIek2K66cN6sznTh?from=from_copylink)**
+
 ## 📸 效果展示 (Screenshots)
 
 ![黑话翻译效果图](demo.png)
