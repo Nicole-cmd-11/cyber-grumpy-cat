@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赛博废话翻译官</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #f4f5f7; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 600px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { font-size: 20px; text-align: center; margin-bottom: 5px; color: #333; }
+        p.sub { text-align: center; font-size: 14px; color: #666; margin-top: 0; margin-bottom: 20px; }
+        textarea { width: 100%; height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box; resize: none; margin-bottom: 15px; }
+        button { width: 100%; padding: 12px; background: #4f46e5; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        button:active { background: #4338ca; }
+        #result { margin-top: 20px; padding: 15px; background: #fdf2f8; border-radius: 8px; font-size: 15px; color: #333; display: none; line-height: 1.6; border-left: 4px solid #ec4899;}
+        .api-key { width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 12px; box-sizing: border-box;}
+        .tip { font-size: 12px; color: #999; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>赛博废话翻译官</h1>
+        <p class="sub">把老板的周报、PM的需求翻译成人话</p>
+        
+        <!-- 临时填 Key 的地方 -->
+        <input type="password" id="apiKey" class="api-key" placeholder="在此粘贴你的 DeepSeek API Key (sk-...)">
+        <div class="tip">注：仅作笔试 Demo 展示，Key 只存在你的浏览器里。</div>
+
+        <textarea id="inputText" placeholder="粘贴一段你看不懂的黑话，比如：我们需要在 Q4 对齐颗粒度，形成业务闭环..."></textarea>
+        <button onclick="translate()">一键翻译成人话</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function translate() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const text = document.getElementById('inputText').value.trim();
+            const resultDiv = document.getElementById('result');
+
+            if (!apiKey) { alert('请先填入 DeepSeek API Key！'); return; }
+            if (!text) { alert('请先粘贴一段黑话！'); return; }
+
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '正在翻译中...';
+
+            try {
+                const response = await fetch('https://api.deepseek.com/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "deepseek-chat",
+                        messages: [
+                            { role: "system", content: "你是一个赛博废话翻译官。把用户输入的职场黑话、周报、需求翻译成直白的人话。去掉赋能、对齐、颗粒度等词，像朋友聊天一样，可以带括号吐槽。不超过100字。" },
+                            { role: "user", content: text }
+                        ]
+                    })
+                });
+
+                const data = await response.json();
+                if(data.error) throw new Error(data.error.message);
+                
+                resultDiv.innerHTML = data.choices[0].message.content;
+            } catch (error) {
+                resultDiv.innerHTML = '翻译失败：' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
