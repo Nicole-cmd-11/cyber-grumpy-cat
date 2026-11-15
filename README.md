@@ -11,7 +11,7 @@
 
 ## 📸 效果展示 (Screenshots)
 
-![黑话翻译效果图](screenshots/demo.png)
+![黑话翻译效果图](demo.png)
 
 ## 🛠️ 怎么跑起来？(How to run)
 本项目已发布，**无需任何代码基础，直接点开上方链接即可使用。**
