@@ -45,7 +45,26 @@
             resultDiv.innerHTML = '正在翻译中...';
 
             try {
-                const response = await fetch('https://api.deepseek.com/chat/completions', {
+                             resultDiv.innerHTML = '请求发送中，请稍等...';
+             const response = await fetch('https://api.deepseek.com/chat/completions', {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json',
+                     'Authorization': `Bearer ${apiKey}`
+                 },
+                 body: JSON.stringify({
+                     model: "deepseek-chat",
+                     messages: [
+                         { role: "system", content: "你是一个赛博废话翻译官。把用户输入的职场黑话、周报、需求翻译成直白的人话。去掉赋能、对齐、颗粒度等词，像朋友聊天一样，可以带括号吐槽。不超过100字。" },
+                         { role: "user", content: text }
+                     ]
+                 })
+             });
+
+             const data = await response.json();
+             if(!response.ok) {
+                 throw new Error(data.error ? data.error.message : '网络请求失败，请检查 API Key 是否正确，或控制台网络报错');
+             }
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
